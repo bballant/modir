@@ -79,7 +79,7 @@ func main() {
 			nextRow := rows[2]
 			for idx, name := range row {
 				if nextRow[idx] != name {
-					subs = append(subs, name)
+					subs = append(subs, nextRow[idx])
 				}
 			}
 		} else if i > 1 {
