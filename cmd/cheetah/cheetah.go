@@ -73,8 +73,16 @@ func main() {
 
 		drawChanges(img, offsetX+width+10, offsetY+height-10, []string{timeInGame(i, len(rows)-1, *gameTime)})
 
-		// Display the changes from the previous image
-		if i > 1 {
+		var subs []string
+
+		if i == 1 && len(rows) > 2 {
+			nextRow := rows[2]
+			for idx, name := range row {
+				if nextRow[idx] != name {
+					subs = append(subs, name)
+				}
+			}
+		} else if i > 1 {
 			prevRow := rows[i-1]
 			maxNameLen := 0
 			for idx, name := range row {
@@ -84,15 +92,17 @@ func main() {
 					}
 				}
 			}
-			var changes []string
 			for idx, name := range row {
 				if prevRow[idx] != name {
 					pos := playerPositions[idx].symbol
 					name = fmt.Sprintf("%s %-*s", pos, maxNameLen, name)
-					changes = append(changes, name+" for "+prevRow[idx])
+					subs = append(subs, name+" for "+prevRow[idx])
 				}
 			}
-			drawChanges(img, offsetX+width+10, offsetY+20, changes)
+		}
+
+		if len(subs) > 0 {
+			drawChanges(img, offsetX+width+10, offsetY+20, subs)
 		}
 	}
 
@@ -114,7 +124,7 @@ func getPositions(offsetX, offsetY, width, height, formation int) []Position {
 	switch formation {
 	case 322:
 		return []Position{
-			{"GK", width/10 + offsetX, height/2 + offsetY},
+			{"GK", width/20 + offsetX, height/2 + offsetY},
 			{"LB", width/4 + offsetX, height/4 + offsetY},
 			{"CB", width/4 + offsetX, height/2 + offsetY},
 			{"RB", width/4 + offsetX, height*3/4 + offsetY},
@@ -125,7 +135,7 @@ func getPositions(offsetX, offsetY, width, height, formation int) []Position {
 		}
 	case 331:
 		return []Position{
-			{"GK", width/10 + offsetX, height/2 + offsetY},
+			{"GK", width/20 + offsetX, height/2 + offsetY},
 			{"LB", width/4 + offsetX, height/2 + offsetY},
 			{"CB", width/4 + offsetX, height/4 + offsetY},
 			{"RB", width/4 + offsetX, height*3/4 + offsetY},
@@ -167,14 +177,14 @@ func drawField(img *image.RGBA, offsetX, offsetY, width, height int, lineColor c
 	drawLine(img, lineColor, width/2+offsetX, offsetY, width/2+offsetX, height+offsetY)
 
 	// left goal box
-	drawLine(img, lineColor, offsetX, offsetY+50, offsetX+60, offsetY+50)
-	drawLine(img, lineColor, offsetX+60, offsetY+50, offsetX+60, offsetY+height-50)
-	drawLine(img, lineColor, offsetX, offsetY+height-50, offsetX+60, offsetY+height-50)
+	drawLine(img, lineColor, offsetX, offsetY+60, offsetX+60, offsetY+60)
+	drawLine(img, lineColor, offsetX+60, offsetY+60, offsetX+60, offsetY+height-60)
+	drawLine(img, lineColor, offsetX, offsetY+height-60, offsetX+60, offsetY+height-60)
 
 	// right goal box
-	drawLine(img, lineColor, offsetX+width-60, offsetY+50, offsetX+width, offsetY+50)
-	drawLine(img, lineColor, offsetX+width-60, offsetY+50, offsetX+width-60, offsetY+height-50)
-	drawLine(img, lineColor, offsetX+width-60, offsetY+height-50, offsetX+width, offsetY+height-50)
+	drawLine(img, lineColor, offsetX+width-60, offsetY+60, offsetX+width, offsetY+60)
+	drawLine(img, lineColor, offsetX+width-60, offsetY+60, offsetX+width-60, offsetY+height-60)
+	drawLine(img, lineColor, offsetX+width-60, offsetY+height-60, offsetX+width, offsetY+height-60)
 }
 
 func drawChanges(img *image.RGBA, startX, startY int, changes []string) {
