@@ -1,0 +1,10 @@
+GK,LB,CB,RB,LM,CM,RM,ST
+Lynx,Lion,Leopard,Bobcat,Margay,Puma,Jaguar,Tiger
+Lynx,Lion,Leopard,Bobcat,Caracal,Ocelot,Serval,Cheetah
+Lynx,Margay,Tiger,Puma,Caracal,Ocelot,Jaguar,Cheetah
+Lynx,Margay,Serval,Puma,Bobcat,Leopard,Jaguar,Lion
+Leopard,Caracal,Tiger,Ocelot,Bobcat,Serval,Cheetah,Lion
+Leopard,Caracal,Tiger,Puma,Margay,Lynx,Cheetah,Jaguar
+Leopard,Lion,Ocelot,Bobcat,Margay,Lynx,Serval,Jaguar
+Leopard,Caracal,Ocelot,Puma,Tiger,Lynx,Serval,Cheetah
+
