@@ -30,6 +30,7 @@ func main() {
 	playerColor := color.Gray{Y: 128}
 	lineThickness := 3
 	changesTextOffsetX := 300
+	summaryTextOffsetY := 50
 
 	r := csv.NewReader(os.Stdin)
 	rows, err := r.ReadAll()
@@ -42,10 +43,12 @@ func main() {
 	cols := 2
 
 	imgWidth := width*cols + changesTextOffsetX*cols
-	imgHeight := height * imagesPerCol
+	imgHeight := height*imagesPerCol + summaryTextOffsetY
 	img := image.NewRGBA(image.Rect(0, 0, imgWidth, imgHeight))
 
 	draw.Draw(img, img.Bounds(), &image.Uniform{fieldColor}, image.ZP, draw.Src)
+
+	playerCounts := map[string]int{}
 
 	for i, row := range rows {
 		if i == 0 || i > maxImages {
@@ -67,7 +70,14 @@ func main() {
 		playerNames := make([]string, len(row))
 		copy(playerNames, row)
 
-		drawPlayers(img, playerColor, playerRadius, playerPositions[:], playerNames[:])
+		for _, name := range playerNames {
+			if _, ok := playerCounts[name]; !ok {
+				playerCounts[name] = 0
+			}
+			playerCounts[name]++
+		}
+
+		drawPlayers(img, playerColor, playerRadius, playerPositions, playerNames)
 
 		addLabel(img, strconv.Itoa(i), offsetX+10, offsetY+height-10)
 
@@ -105,6 +115,13 @@ func main() {
 			drawChanges(img, offsetX+width+10, offsetY+20, subs)
 		}
 	}
+
+	summary := ""
+	term := float64(*gameTime) / float64(len(rows)-1)
+	for name, count := range playerCounts {
+		summary = fmt.Sprintf("%s %s %s", summary, name, decimalToTimeString(term*float64(count)))
+	}
+	drawChanges(img, 5, imgHeight-20, []string{summary})
 
 	fileName := "soccer_fields.png"
 	f, err := os.Create(fileName)
