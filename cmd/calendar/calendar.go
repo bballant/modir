@@ -39,6 +39,7 @@ func main() {
 
 	// Create a new image with size 400 x 300
 	margin := 40
+	topOffset := 10
 	calWidth := 400
 	calHeight := 300
 	imageWidth := calWidth + 2*margin
@@ -53,25 +54,25 @@ func main() {
 	}
 
 	monthYearLabel := fmt.Sprintf("%s %d", month, year)
-	addLabel(img, monthYearLabel, margin+5, 15)
+	addLabel(img, monthYearLabel, margin+5, 20)
 
 	offsetX := calWidth / 7
 	offsetY := calHeight / 5
 
 	// draw vertical grid lines
 	for x := 0; x < 8; x++ {
-		drawLine(img, color.Black, x*offsetX+margin, margin, x*offsetX+margin, calHeight+margin)
+		drawLine(img, color.Black, x*offsetX+margin, margin+topOffset, x*offsetX+margin, calHeight+margin+topOffset)
 	}
 
 	// draw horizontal grid lines
 	for y := 0; y < 6; y++ {
-		drawLine(img, color.Black, margin, y*offsetY+margin, calWidth+margin, y*offsetY+margin)
+		drawLine(img, color.Black, margin, y*offsetY+margin+topOffset, calWidth+margin, y*offsetY+margin+topOffset)
 	}
 
 	// Draw the day labels
 	days := []string{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
 	for i, day := range days {
-		addLabel(img, day, i*offsetX+margin+5, margin-5)
+		addLabel(img, day, i*offsetX+margin+5, margin-5+topOffset)
 	}
 
 	// Get the date for the first day of the month
@@ -86,7 +87,7 @@ func main() {
 		if y >= 5 {
 			break // stop drawing if we reached the end of the calendar grid
 		}
-		addLabel(img, fmt.Sprint(i), x*offsetX+margin+5, y*offsetY+margin+15)
+		addLabel(img, fmt.Sprint(i), x*offsetX+margin+5, y*offsetY+margin+15+topOffset)
 	}
 
 	// Save the image as a PNG file
