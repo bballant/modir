@@ -117,11 +117,20 @@ func main() {
 	}
 
 	summary := ""
+	overflow := ""
 	term := float64(*gameTime) / float64(len(rows)-1)
 	for name, count := range playerCounts {
-		summary = fmt.Sprintf("%s %s %s", summary, name, decimalToTimeString(term*float64(count)))
+		if len(summary) < 100 {
+			summary = fmt.Sprintf("%s %s %s", summary, name, decimalToTimeString(term*float64(count)))
+		} else {
+			overflow = fmt.Sprintf("%s %s %s", overflow, name, decimalToTimeString(term*float64(count)))
+		}
+
 	}
-	drawChanges(img, 5, imgHeight-20, []string{summary})
+	drawChanges(img, 5, imgHeight-30, []string{summary})
+	if overflow != "" {
+		drawChanges(img, 5, imgHeight-10, []string{overflow})
+	}
 
 	fileName := "soccer_fields.png"
 	f, err := os.Create(fileName)
